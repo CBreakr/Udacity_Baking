@@ -1,0 +1,67 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/AppTheme"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:layout_marginLeft="@dimen/widget_title_margin_left"
+        android:layout_marginVertical="@dimen/widget_title_margin_vertical"
+        android:textSize="@dimen/widget_title_text_size"/>
+
+    <FrameLayout
+        android:id="@+id/widget_button_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/widget_button_bar_margin">
+
+        <Button
+            android:id="@+id/widget_recipe_return_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/widget_recipe_return"/>
+
+    </FrameLayout>
+
+    <GridView
+        android:id="@+id/widget_grid_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:numColumns="1">
+    </GridView>
+
+    <RelativeLayout
+        android:id="@+id/recipe_empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_centerInParent="true"
+            android:textAlignment="center"
+            android:text="No Recipes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/ingredient_empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_centerInParent="true"
+            android:textAlignment="center"
+            android:text="No Ingredients"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+    </RelativeLayout>
+
+</LinearLayout>

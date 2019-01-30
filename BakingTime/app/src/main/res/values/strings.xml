@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Baking Time</string>
+    <string name="next_step_button_text">Next Step</string>
+    <string name="previous_step_button_text">Previous Step</string>
+    <string name="servings_label">Servings: </string>
+    <string name="step_number_marker">) </string>
+
+    <string name="RecipeSelectionLabel">Recipes</string>
+    <string name="StepSelectionLabel">Steps</string>
+    <string name="IngredientViewLabel">Ingredients</string>
+    <string name="ReturnToStepLabel">Return to \nStep</string>
+
+    <string name="layout_tag">@string/layout_tag_MAIN_PORTRAIT</string>
+
+    <string name="layout_tag_MAIN_PORTRAIT">MAIN_PORTRAIT</string>
+    <string name="layout_tag_MAIN_LANDCAPE">MAIN_LANDSCAPE</string>
+    <string name="layout_tag_TABLET">TABLET</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+
+    <string name="widget_recipe_return">Recipes</string>
+    <string name="widget_goto_app">Open App</string>
+
+    <string name="reset_button_text">Reset App</string>
+</resources>
