@@ -19,6 +19,9 @@ import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 
 import app.com.example.android.bakingtime.RecipeUtils.RawJsonReader;
@@ -49,6 +52,8 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.BandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
@@ -273,12 +278,18 @@ public class IndividualStepFragment extends StateParameterFragment
     private void initializePlayer(Uri mediaUri) {
         if (mExoPlayer == null) {
             // Create an instance of the ExoPlayer.
-            TrackSelector trackSelector = new DefaultTrackSelector();
+//            TrackSelector trackSelector = new DefaultTrackSelector();
+            BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+            TrackSelection.Factory videoTrackSelectionFactory =
+                    new AdaptiveTrackSelection.Factory(bandwidthMeter);
+            TrackSelector trackSelector =
+                    new DefaultTrackSelector(videoTrackSelectionFactory);
             LoadControl loadControl = new DefaultLoadControl();
             DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(mParentActivity);
 
             mExoPlayer = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector, loadControl);
             mPlayerView.setPlayer(mExoPlayer);
+            mPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);
 
             // Set the ExoPlayer.EventListener to this activity.
             mExoPlayer.addListener(this);
@@ -298,13 +309,36 @@ public class IndividualStepFragment extends StateParameterFragment
                     null);
              */
 
-            DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(mParentActivity, "BakingTime");
+//            DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(mParentActivity, "BakingTime");
             DefaultExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
 
-            MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory).setExtractorsFactory(extractorsFactory).createMediaSource(mediaUri);
+            DefaultDataSourceFactory dataSourceFactory =
+                    new DefaultDataSourceFactory(getContext(),
+                            Util.getUserAgent(getContext(), "BakingTime"));
 
+            ExtractorMediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory)
+                    .createMediaSource(mediaUri);
+
+//            ExtractorMediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory)
+//                    .setExtractorsFactory(extractorsFactory)
+//                    .createMediaSource(mediaUri);
             mExoPlayer.prepare(mediaSource);
             mExoPlayer.setPlayWhenReady(true);
+
+//            DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+//            TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
+//            TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+//            mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector);
+//
+//            mPlayerView.setPlayer(mExoPlayer);
+//            // Prepare the MediaSource.
+//            String userAgent = Util.getUserAgent(getContext(), "BakingTime");
+//            ExtractorMediaSource mediaSource = new ExtractorMediaSource.Factory(new DefaultDataSourceFactory(
+//                    getContext(), userAgent, bandwidthMeter))
+//                    .createMediaSource(mediaUri);
+//            mExoPlayer.prepare(mediaSource);
+//
+//            mExoPlayer.setPlayWhenReady(true);
         }
     }
 
