@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/border"
-    android:padding="10dp"
+    android:padding="@dimen/list_item_padding"
     android:layout_gravity="left"
     >
 
@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="@dimen/ingredient_margin_name_top"
+        android:layout_marginTop="@dimen/list_item_margin_top"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         />
@@ -26,7 +26,7 @@
         app:layout_constraintTop_toBottomOf="@id/ingredient_name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="@dimen/list_item_margin_text_left"
         />
 
     <TextView
@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toRightOf="@id/ingredient_measure"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="@dimen/list_item_margin_text_left"
         app:layout_constraintTop_toTopOf="@id/ingredient_measure"
         app:layout_constraintBottom_toBottomOf="@id/ingredient_measure"
         />

@@ -5,9 +5,11 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center"
-    android:layout_marginHorizontal="5dp"
-    android:layout_marginVertical="8dp"
-    android:padding="10dp"
+    android:layout_marginLeft="@dimen/widget_item_horizontal_padding"
+    android:layout_marginRight="@dimen/widget_item_horizontal_padding"
+    android:layout_marginTop="@dimen/widget_ingredient_item_vertical_padding"
+    android:layout_marginBottom="@dimen/widget_ingredient_item_vertical_padding"
+    android:padding="@dimen/list_item_padding"
     android:background="@drawable/border">
 
     <TextView

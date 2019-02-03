@@ -199,15 +199,7 @@ public class StateManagement implements Parcelable {
     }
 
     public void setScreen(String layoutTag, Context context){
-        if(layoutTag.compareTo(context.getString(R.string.layout_tag_MAIN_PORTRAIT)) == 0) {
-            mSubState.setScreen(ScreenMode.PORTRAIT);
-        }
-        else if(layoutTag.compareTo(context.getString(R.string.layout_tag_MAIN_LANDCAPE)) == 0) {
-            mSubState.setScreen(ScreenMode.LANDSCAPE);
-        }
-        else if(layoutTag.compareTo(context.getString(R.string.layout_tag_TABLET)) == 0) {
-            mSubState.setScreen(ScreenMode.TABLET);
-        }
+        mSubState.setScreen(layoutTag, context);
     }
 
     public ScreenMode getScreen() {
@@ -492,9 +484,7 @@ public class StateManagement implements Parcelable {
         switch(action){
             case RECIPE_LIST:
             case STEP_LIST:
-                break;
             case INGREDIENT_LIST:
-                mSubState.setStepIndex(NoPosition);
                 break;
             case NEXT_STEP:
             case PREVIOUS_STEP:

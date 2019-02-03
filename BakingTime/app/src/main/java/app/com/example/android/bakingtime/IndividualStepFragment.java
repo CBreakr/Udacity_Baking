@@ -61,7 +61,6 @@ import com.google.android.exoplayer2.video.VideoRendererEventListener;
 public class IndividualStepFragment extends StateParameterFragment
     implements View.OnClickListener, ExoPlayer.EventListener
 {
-    private boolean mIsVertical = true;
     private Step mStep;
     private long mCurrentVideoPosition;
     private boolean mHasNext;
@@ -109,7 +108,7 @@ public class IndividualStepFragment extends StateParameterFragment
         mParentActivity = (MainActivity) getActivity();
 
         View rootView;
-        if(mIsVertical){
+        if(mIndividualStepSubState.isVertical(mParentActivity)){
             rootView = inflater.inflate(R.layout.recipe_step_vertical, container, false);
         }
         else{
@@ -127,7 +126,6 @@ public class IndividualStepFragment extends StateParameterFragment
     }
 
     private void restoreFromSavedInstance(Bundle saved){
-        mIsVertical = saved.getBoolean(VERTICAL_SAVED);
         mStep = RawJsonReader.parseIndividualStepFromString(saved.getString(STEP_STRING_SAVED));
         mCurrentVideoPosition = saved.getLong(VIDEO_POSITION_SAVED);
         mHasNext = saved.getBoolean(HASNEXT_SAVED);
@@ -139,24 +137,21 @@ public class IndividualStepFragment extends StateParameterFragment
     public void fillParameters(StateManagement state){
         mIndividualStepSubState = state.getSubState().copy();
 
-        boolean isVertical = mIndividualStepSubState.getScreen() == StateManagement.ScreenMode.LANDSCAPE ? false : true;
         Recipe currentRecipe = state.getCurrentRecipe();
         int index = mIndividualStepSubState.getStepIndex();
         Step currentStep = currentRecipe.getSteps().get(index);
-        boolean hasNext = index <= currentRecipe.getSteps().size() - 1;
+        boolean hasNext = index < currentRecipe.getSteps().size() - 1;
         boolean hasPrevious = index > 0;
 
-        fillParameters(isVertical, currentStep, hasNext, hasPrevious);
+        fillParameters(currentStep, hasNext, hasPrevious);
     }
 
     // pass it in directly from the initial creation
     public void fillParameters(
-                               boolean isVertical,
                                Step step,
                                boolean hasNext,
                                boolean hasPrevious)
     {
-        mIsVertical = isVertical;
         mStep = step;
         mHasNext = hasNext;
         mHasPrevious = hasPrevious;
@@ -201,7 +196,6 @@ public class IndividualStepFragment extends StateParameterFragment
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(VERTICAL_SAVED, mIsVertical);
         outState.putString(STEP_STRING_SAVED, RawJsonReader.createJSONStringFromIndividualStep(mStep));
         outState.putLong(VIDEO_POSITION_SAVED, mCurrentVideoPosition);
         outState.putBoolean(HASNEXT_SAVED, mHasNext);
@@ -277,13 +271,13 @@ public class IndividualStepFragment extends StateParameterFragment
      */
     private void initializePlayer(Uri mediaUri) {
         if (mExoPlayer == null) {
-            // Create an instance of the ExoPlayer.
-//            TrackSelector trackSelector = new DefaultTrackSelector();
             BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
             TrackSelection.Factory videoTrackSelectionFactory =
                     new AdaptiveTrackSelection.Factory(bandwidthMeter);
+
             TrackSelector trackSelector =
                     new DefaultTrackSelector(videoTrackSelectionFactory);
+
             LoadControl loadControl = new DefaultLoadControl();
             DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(mParentActivity);
 
@@ -291,54 +285,19 @@ public class IndividualStepFragment extends StateParameterFragment
             mPlayerView.setPlayer(mExoPlayer);
             mPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);
 
-            // Set the ExoPlayer.EventListener to this activity.
             mExoPlayer.addListener(this);
 
-            /*
-            // Prepare the MediaSource.
-            String userAgent = Util.getUserAgent(mParentActivity, "BakingTime");
-
-            MediaSource mediaSource =
-            new ExtractorMediaSource(
-                    mediaUri,
-                    new DefaultDataSourceFactory(
-                            mParentActivity,
-                            userAgent),
-                    new DefaultExtractorsFactory(),
-                    null,
-                    null);
-             */
-
-//            DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(mParentActivity, "BakingTime");
-            DefaultExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+            mPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);
 
             DefaultDataSourceFactory dataSourceFactory =
-                    new DefaultDataSourceFactory(getContext(),
-                            Util.getUserAgent(getContext(), "BakingTime"));
+                    new DefaultDataSourceFactory(mParentActivity,
+                            Util.getUserAgent(mParentActivity, "BakingTime"));
 
             ExtractorMediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory)
                     .createMediaSource(mediaUri);
 
-//            ExtractorMediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory)
-//                    .setExtractorsFactory(extractorsFactory)
-//                    .createMediaSource(mediaUri);
             mExoPlayer.prepare(mediaSource);
             mExoPlayer.setPlayWhenReady(true);
-
-//            DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-//            TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
-//            TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-//            mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector);
-//
-//            mPlayerView.setPlayer(mExoPlayer);
-//            // Prepare the MediaSource.
-//            String userAgent = Util.getUserAgent(getContext(), "BakingTime");
-//            ExtractorMediaSource mediaSource = new ExtractorMediaSource.Factory(new DefaultDataSourceFactory(
-//                    getContext(), userAgent, bandwidthMeter))
-//                    .createMediaSource(mediaUri);
-//            mExoPlayer.prepare(mediaSource);
-//
-//            mExoPlayer.setPlayWhenReady(true);
         }
     }
 
@@ -352,15 +311,23 @@ public class IndividualStepFragment extends StateParameterFragment
      * Release ExoPlayer.
      */
     private void releasePlayer() {
-        mExoPlayer.stop();
-        mExoPlayer.release();
-        mExoPlayer = null;
+        if(mExoPlayer != null) {
+            mExoPlayer.stop();
+            mExoPlayer.release();
+            mExoPlayer = null;
+        }
     }
-
 
     @Override
     public void onPause() {
         super.onPause();
+        releasePlayer();
+        mMediaSession.setActive(false);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
         releasePlayer();
         mMediaSession.setActive(false);
     }

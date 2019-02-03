@@ -20,7 +20,6 @@ import app.com.example.android.bakingtime.UI_Utils.SubState;
 public class StepListFragment extends StateParameterFragment
         implements StepAdapter.StepAdapterClickHandler
 {
-    private boolean isVertical = true;
     private List<Step> mStepList;
 
     private SubState mStepListSubState;
@@ -28,13 +27,16 @@ public class StepListFragment extends StateParameterFragment
     private StepAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
+    private static final int fTabletGridColumns = 1;
     private static final int fVerticalGridColumns = 2;
-    private static final int fHorizontalGridColumns = 4;
+    private static final int fHorizontalGridColumns = 3;
 
     private static final String fStepKey = "steps";
     private static final String fSubStateKey = "substate";
 
     private static final String fBackstackTag = "STEPLIST";
+
+    private MainActivity mParentActivity;
 
     public String getBackStackTag(){
         return fBackstackTag;
@@ -58,14 +60,7 @@ public class StepListFragment extends StateParameterFragment
 
         mRecyclerView = rootView.findViewById(R.id.recyclerview_step_list);
 
-        if(isVertical){
-            mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), fVerticalGridColumns));
-        }
-        else{
-            mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), fHorizontalGridColumns));
-        }
-
-        setupAdapter();
+        mParentActivity = (MainActivity) getActivity();
 
         if(savedInstanceState != null){
             setSteps(
@@ -76,6 +71,20 @@ public class StepListFragment extends StateParameterFragment
 
             mStepListSubState = savedInstanceState.getParcelable(fSubStateKey);
         }
+
+        switch(mStepListSubState.getScreen()){
+            case PORTRAIT:
+                mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), fVerticalGridColumns));
+                break;
+            case LANDSCAPE:
+                mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), fHorizontalGridColumns));
+                break;
+            case TABLET:
+                mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), fTabletGridColumns));
+                break;
+        }
+
+        setupAdapter();
 
         updateParent();
 

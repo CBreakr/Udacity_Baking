@@ -13,6 +13,31 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
 
     <dimen name="transition_time">300</dimen>
 
-    <dimen name="ingredient_margin_name_top">8dp</dimen>
+    <dimen name="list_item_margin_top">8dp</dimen>
+    <dimen name="list_item_margin_text_left">8dp</dimen>
+
+    <dimen name="list_item_padding">10dp</dimen>
+
+    <dimen name="exoplayer_margin">2dp</dimen>
+    <dimen name="video_guideline_ratio">0.6</dimen>
+
+    <dimen name="tablet_guideline_ratio">0.4</dimen>
+
+    <dimen name="recipe_text_padding">10dp</dimen>
+    <dimen name="recipe_button_margin_top_horizontal">10dp</dimen>
+    <dimen name="recipe_text_margin_top_vertical">15dp</dimen>
+    <dimen name="recipe_button_margin_top_vertical">15dp</dimen>
+
+    <dimen name="widget_item_horizontal_padding">5dp</dimen>
+    <dimen name="widget_ingredient_item_vertical_padding">8dp</dimen>
+    <dimen name="widget_recipe_item_vertical_padding">10dp</dimen>
+
+    <dimen name="widget_width">100dp</dimen>
+    <dimen name="widget_height">200dp</dimen>
+
+    <dimen name="exoplayer_width">300dp</dimen>
+
+    <dimen name="tablet_column_width_portrait">300dp</dimen>
+    <dimen name="tablet_column_width_landscape">400dp</dimen>
 
 </resources>

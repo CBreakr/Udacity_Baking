@@ -22,7 +22,7 @@
 
         <FrameLayout
             android:id="@+id/navigation_frame"
-            android:layout_width="@dimen/tablet_column_width_portrait"
+            android:layout_width="@dimen/tablet_column_width_landscape"
             android:layout_height="wrap_content"
             android:scaleType="centerInside"
             android:layout_gravity="fill"
@@ -31,12 +31,13 @@
 
         <FrameLayout
             android:id="@+id/detail_frame"
-            android:layout_width="@dimen/tablet_column_width_portrait"
+            android:layout_width="@dimen/tablet_column_width_landscape"
             android:layout_height="wrap_content"
             android:scaleType="centerInside"
             android:layout_gravity="fill"
             android:layout_columnWeight="1"
             />
+
     </GridLayout>
 
     <TextView

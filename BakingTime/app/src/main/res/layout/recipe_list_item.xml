@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/border"
-    android:padding="10dp"
+    android:padding="@dimen/list_item_padding"
     android:layout_gravity="center">
 
     <FrameLayout
@@ -28,9 +28,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/list_item_margin_top"
         app:layout_constraintLeft_toRightOf="@id/image_and_error_holder"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="@dimen/list_item_margin_text_left"
         />
 
     <TextView
@@ -39,9 +39,9 @@
         android:layout_height="wrap_content"
         android:text="@string/servings_label"
         app:layout_constraintTop_toBottomOf="@id/recipe_name"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/list_item_margin_top"
         app:layout_constraintLeft_toRightOf="@id/image_and_error_holder"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="@dimen/list_item_margin_text_left"
         />
 
     <TextView
@@ -49,7 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toRightOf="@id/servings_label"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="@dimen/list_item_margin_text_left"
         app:layout_constraintTop_toTopOf="@id/servings_label"
         />
 

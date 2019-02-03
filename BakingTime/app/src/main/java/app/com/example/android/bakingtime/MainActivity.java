@@ -25,9 +25,9 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
-    // TODO - move numbers for dimensions to values
+    // TODO - in general test all of the screen types and orientations
 
-    // TODO - implement the exo-player for step
+    // TODO- why is the exoplayer hidden in the horizontal orientation?
 
     private final String fStateManagementParcelableKey = "STATE_MANAGEMENT_KEY";
     private StateManagement mCurrentState;
@@ -86,15 +86,15 @@ public class MainActivity extends AppCompatActivity {
         mCurrentState = savedInstanceState.getParcelable(fStateManagementParcelableKey);
     }
 
-    private void fillInitialState(){
-        List<Recipe> recipes = RawJsonReader.getRecipes(this);
-
-        Gson gson = new Gson();
-        String json = gson.toJson(recipes);
-
-        List<Recipe> newRecipes = RawJsonReader.parseRecipesFromString(json);
-        mCurrentState = new StateManagement(newRecipes);
-    }
+//    private void fillInitialState(){
+//        List<Recipe> recipes = RawJsonReader.getRecipes(this);
+//
+//        Gson gson = new Gson();
+//        String json = gson.toJson(recipes);
+//
+//        List<Recipe> newRecipes = RawJsonReader.parseRecipesFromString(json);
+//        mCurrentState = new StateManagement(newRecipes);
+//    }
 
     public void completeInitialSetup(List<Recipe> recipes){
         mCurrentState = new StateManagement(recipes);
@@ -105,8 +105,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setCurrentStateScreenMode(){
-        String layoutTag = layoutTagView.getText().toString();
+        String layoutTag = getLayoutTag();
         mCurrentState.setScreen(layoutTag, this);
+    }
+
+    public String getLayoutTag(){
+        return layoutTagView.getText().toString();
     }
 
     private void setButtons(){

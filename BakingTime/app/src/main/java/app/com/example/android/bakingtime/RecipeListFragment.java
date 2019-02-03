@@ -20,7 +20,6 @@ import app.com.example.android.bakingtime.UI_Utils.SubState;
 public class RecipeListFragment extends StateParameterFragment
         implements RecipeAdapter.RecipeAdapterClickHandler
 {
-    private boolean isVertical = true;
     private List<Recipe> mRecipeList;
 
     private SubState mRecipeListSubState;
@@ -28,13 +27,15 @@ public class RecipeListFragment extends StateParameterFragment
     private RecipeAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
-    private static final int fVerticalGridColumns = 2;
-    private static final int fHorizontalGridColumns = 4;
+    private static final int fVerticalGridColumns = 1;
+    private static final int fHorizontalGridColumns = 2;
 
     private static final String fRecipeKey = "recipes";
     private static final String fSubStateKey = "substate";
 
     private static final String fBackstackTag = "RECIPELIST";
+
+    private MainActivity mParentActivity;
 
     public String getBackStackTag(){
         return fBackstackTag;
@@ -58,14 +59,7 @@ public class RecipeListFragment extends StateParameterFragment
 
         mRecyclerView = rootView.findViewById(R.id.recyclerview_recipe_list);
 
-        if(isVertical){
-            mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), fVerticalGridColumns));
-        }
-        else{
-            mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), fHorizontalGridColumns));
-        }
-
-        setupAdapter();
+        mParentActivity = (MainActivity) getActivity();
 
         if(savedInstanceState != null){
             setRecipes(
@@ -76,6 +70,15 @@ public class RecipeListFragment extends StateParameterFragment
 
             mRecipeListSubState = savedInstanceState.getParcelable(fSubStateKey);
         }
+
+        if(mRecipeListSubState.isVertical(mParentActivity)){
+            mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), fVerticalGridColumns));
+        }
+        else{
+            mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), fHorizontalGridColumns));
+        }
+
+        setupAdapter();
 
         updateParent();
 

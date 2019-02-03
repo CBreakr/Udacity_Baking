@@ -1,7 +1,11 @@
 package app.com.example.android.bakingtime.UI_Utils;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import app.com.example.android.bakingtime.MainActivity;
+import app.com.example.android.bakingtime.R;
 
 public class SubState implements Parcelable {
     private int mRecipeIndex;
@@ -48,8 +52,24 @@ public class SubState implements Parcelable {
         return mScreen;
     }
 
-    public void setScreen(StateManagement.ScreenMode mScreen) {
-        this.mScreen = mScreen;
+    public void setScreen(String layoutTag, Context context) {
+        if(layoutTag.compareTo(context.getString(R.string.layout_tag_MAIN_PORTRAIT)) == 0) {
+            mScreen = StateManagement.ScreenMode.PORTRAIT;
+        }
+        else if(layoutTag.compareTo(context.getString(R.string.layout_tag_MAIN_LANDCAPE)) == 0) {
+            mScreen = StateManagement.ScreenMode.LANDSCAPE;
+        }
+        else if(layoutTag.compareTo(context.getString(R.string.layout_tag_TABLET)) == 0) {
+            mScreen = StateManagement.ScreenMode.TABLET;
+        }
+    }
+
+    public boolean isVertical(MainActivity parent){
+        setScreen(parent.getLayoutTag(), parent);
+        if(mScreen == StateManagement.ScreenMode.LANDSCAPE){
+            return false;
+        }
+        return true;
     }
 
     public SubState copy(){
@@ -128,7 +148,7 @@ public class SubState implements Parcelable {
                 StateManagement.UserActionSubType.forInt(Integer.parseInt(det));
         this.setCurrentDetailActionSubType(detail);
 
-        this.setScreen(StateManagement.ScreenMode.forInt(in.readInt()));
+        mScreen = StateManagement.ScreenMode.forInt(in.readInt());
     }
 
     @Override
